@@ -1,0 +1,57 @@
+<layout-default
+    [content]="contentTpl"
+    [customError]="null"
+    [options]="options"
+>
+    <ng-template>
+    </ng-template>
+
+    <layout-default-header-item direction="right" hidden="mobile">
+        <div
+            [nzDropdownMenu]="settingsMenu"
+            layout-default-header-item-trigger
+            nz-dropdown
+            nzPlacement="bottomRight"
+            nzTrigger="click"
+        >
+            <i nz-icon nzType="setting"></i>
+        </div>
+        <nz-dropdown-menu #settingsMenu="nzDropdownMenu">
+            <div nz-menu style="width: 200px;">
+                <div nz-menu-item>
+                    <header-fullscreen></header-fullscreen>
+                </div>
+                <div nz-menu-item>
+                    <header-clear-storage></header-clear-storage>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+    </layout-default-header-item>
+
+    <layout-default-header-item direction="right">
+        <div
+            class="low-stock-alert-badge"
+            routerLink="/stock/view-low-stock"
+            nz-tooltip
+            nzTooltipTitle="Low Stock Alert"
+        >
+            <ng-container *ngIf="(lowStockCount$ | async) as count">
+                <nz-badge *ngIf="count > 0" [nzCount]="count" [nzOverflowCount]="99">
+                    <i nz-icon nzType="warning" style="font-size: 18px; color: #faad14;"></i>
+                </nz-badge>
+                <i *ngIf="count <= 0" nz-icon nzType="warning" style="font-size: 18px; color: #faad14;"></i>
+            </ng-container>
+            <i *ngIf="!(lowStockCount$ | async)" nz-icon nzType="warning" style="font-size: 18px; color: #faad14;"></i>
+        </div>
+    </layout-default-header-item>
+
+    <layout-default-header-item direction="right">
+        <header-user></header-user>
+    </layout-default-header-item>
+
+    <ng-template #contentTpl>
+        <router-outlet></router-outlet>
+    </ng-template>
+</layout-default>
+
+<theme-btn></theme-btn>
