@@ -5,22 +5,48 @@
 </nz-card>
 
 <div class="dashboard-grid">
-    <nz-card
-        class="stat-card"
-        [ngClass]="getLowStockCardClass()"
-        (click)="navigateToLowStock()"
-    >
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <div class="stat-number" *ngIf="!isLoadingLowStock">{{ lowStockCount }}</div>
-                <div class="stat-number" *ngIf="isLoadingLowStock">
-                    <nz-skeleton-element nzType="button" nzActive></nz-skeleton-element>
+    <ng-container *ngIf="isLoadingLowStock; else contentOrError">
+        <app-stat-card-skeleton></app-stat-card-skeleton>
+    </ng-container>
+
+    <ng-template #contentOrError>
+        <ng-container *ngIf="!hasError; else errorState">
+            <nz-card
+                class="stat-card"
+                [ngClass]="getLowStockCardClass()"
+                (click)="navigateToLowStock()"
+            >
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <div class="stat-number">{{ lowStockCount }}</div>
+                        <div class="stat-label">Low Stock Alerts</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i nz-icon nzType="warning"></i>
+                    </div>
                 </div>
-                <div class="stat-label">Low Stock Alerts</div>
-            </div>
-            <div class="stat-icon">
-                <i nz-icon nzType="warning"></i>
-            </div>
-        </div>
-    </nz-card>
+            </nz-card>
+        </ng-container>
+
+        <ng-template #errorState>
+            <nz-card
+                class="stat-card"
+                [ngClass]="getLowStockCardClass()"
+            >
+                <div class="error-content">
+                    <p class="error-message">加载失败，请重试</p>
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nzSize="small"
+                        class="retry-button"
+                        (click)="onRetry()"
+                    >
+                        <i nz-icon nzType="reload"></i>
+                        重试
+                    </button>
+                </div>
+            </nz-card>
+        </ng-template>
+    </ng-template>
 </div>

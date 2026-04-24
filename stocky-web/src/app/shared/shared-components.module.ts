@@ -27,12 +27,14 @@ import {SearchResetButtonComponent} from './components/search-reset-button/searc
 import {SearchResultTableComponent} from './components/search-result-table/search-result-table.component';
 import {SettingLockerComponent} from './components/setting-locker/setting-locker.component';
 import {SimpleButtonComponent} from './components/simple-button/simple-button.component';
+import {StatCardSkeletonComponent} from './components/stat-card-skeleton/stat-card-skeleton.component';
 import {StatusBadgeComponent} from './components/status-badge/status-badge.component';
 import {SwitchToggleComponent} from './components/switch-toggle/switch-toggle.component';
 import {TableItemEditableComponent} from './components/table-item-editable/table-item-editable.component';
 import {TableItemTruncatableComponent} from './components/table-item-truncatable/table-item-truncatable.component';
 import {TableItemComponent} from './components/table-item/table-item.component';
 import {TableComponent} from './components/table/table.component';
+import {TableSkeletonComponent} from './components/table-skeleton/table-skeleton.component';
 import {TextareaLimitComponent} from './components/textarea-limit/textarea-limit.component';
 import {UpdateDeleteActionComponent} from './components/update-delete-action/update-delete-action.component';
 import {UploadFileComponent} from './components/upload-file/upload-file.component';
@@ -76,5 +78,7 @@ export const SHARED_COMPONENTS: Array<Type<void>> = [
     PasswordInputComponent,
     SettingLockerComponent,
     PageAlertComponent,
-    UserRolesComponent
+    UserRolesComponent,
+    StatCardSkeletonComponent,
+    TableSkeletonComponent
 ];

@@ -57,6 +57,28 @@ import {LowStockAlertUsecase} from '../stock/_usecase/low-stock-alert.usecase';
         .danger-card .stat-icon {
             color: #ff4d4f;
         }
+        .error-card {
+            background: #fff;
+            border: 1px solid #ff4d4f;
+            cursor: default;
+        }
+        .error-card:hover {
+            box-shadow: none;
+            transform: none;
+        }
+        .error-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .error-message {
+            color: #ff4d4f;
+            font-size: 14px;
+            margin: 0;
+        }
+        .retry-button {
+            cursor: pointer;
+        }
     `],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -64,6 +86,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     public lowStockCount = 0;
     public isLoadingLowStock = false;
+    public hasError = false;
 
     constructor(
         private passportUsecase: PassportUsecase,
@@ -86,6 +109,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private loadLowStockCount(): void {
         this.isLoadingLowStock = true;
+        this.hasError = false;
         this.lowStockUsecase.getLowStockCount()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
@@ -96,15 +120,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 error: () => {
                     this.lowStockCount = 0;
                     this.isLoadingLowStock = false;
+                    this.hasError = true;
                 }
             });
     }
 
     public navigateToLowStock(): void {
-        this.router.navigate(['/stock/view-low-stock']);
+        if (!this.isLoadingLowStock && !this.hasError) {
+            this.router.navigate(['/stock/view-low-stock']);
+        }
+    }
+
+    public onRetry(): void {
+        this.loadLowStockCount();
     }
 
     public getLowStockCardClass(): string {
+        if (this.hasError) {
+            return 'error-card';
+        }
         if (this.lowStockCount > 10) {
             return 'danger-card';
         }

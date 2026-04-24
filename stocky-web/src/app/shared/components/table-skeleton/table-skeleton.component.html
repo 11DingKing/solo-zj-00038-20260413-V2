@@ -1,0 +1,28 @@
+<div class="skeleton-table-wrapper">
+    <table class="skeleton-table">
+        <thead>
+            <tr>
+                <th style="width: 50px;">
+                    <div class="skeleton-cell skeleton-checkbox"></div>
+                </th>
+                <ng-container *ngFor="let _ of getColumns()">
+                    <th>
+                        <div class="skeleton-header-cell" style="width: 60%;"></div>
+                    </th>
+                </ng-container>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="skeleton-row" *ngFor="let _ of getRows()">
+                <td>
+                    <div class="skeleton-cell skeleton-checkbox"></div>
+                </td>
+                <ng-container *ngFor="let _ of getColumns()">
+                    <td>
+                        <div class="skeleton-cell"></div>
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+</div>
