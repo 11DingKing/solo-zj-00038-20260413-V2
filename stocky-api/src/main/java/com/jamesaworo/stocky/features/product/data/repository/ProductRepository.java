@@ -6,16 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author Aworo James
- * @since 5/10/23
- */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
@@ -33,4 +30,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 			"WHERE b.lowStockPoint IS NOT NULL AND b.quantity <= b.lowStockPoint " +
 			"AND b.isActive = true AND p.isActiveStatus = true")
 	Long countLowStockProducts();
+
+	@Query("SELECT p FROM Product p JOIN FETCH p.basic b JOIN FETCH b.productCategory c " +
+			"WHERE c.id IN :categoryIds AND b.isActive = true AND p.isActiveStatus = true")
+	List<Product> findByCategoryIds(@Param("categoryIds") List<Long> categoryIds);
+
+	@Modifying
+	@Query("UPDATE ProductBasic b SET b.lowStockPoint = :lowStockPoint WHERE b.productCategory.id IN :categoryIds")
+	int updateLowStockPointByCategoryIds(@Param("categoryIds") List<Long> categoryIds, @Param("lowStockPoint") Integer lowStockPoint);
 }

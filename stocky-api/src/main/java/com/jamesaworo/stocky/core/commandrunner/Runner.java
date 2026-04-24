@@ -2,6 +2,7 @@ package com.jamesaworo.stocky.core.commandrunner;
 
 import com.jamesaworo.stocky.core.commandrunner.seeders.CompanySeeder;
 import com.jamesaworo.stocky.core.commandrunner.seeders.PermissionSeeder;
+import com.jamesaworo.stocky.core.commandrunner.seeders.ProductStatusSeeder;
 import com.jamesaworo.stocky.core.commandrunner.seeders.SettingSeeder;
 import com.jamesaworo.stocky.core.commandrunner.seeders.UserSeeder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,20 @@ public class Runner implements CommandLineRunner {
     private final CompanySeeder companySeeder;
     private final PermissionSeeder permissionSeeder;
     private final UserSeeder userSeeder;
+    private final ProductStatusSeeder productStatusSeeder;
 
     @Autowired
     public Runner(
             SettingSeeder settingSeeder,
             CompanySeeder companySeeder,
             PermissionSeeder permissionSeeder,
-            UserSeeder userSeeder) {
+            UserSeeder userSeeder,
+            ProductStatusSeeder productStatusSeeder) {
         this.settingSeeder = settingSeeder;
         this.companySeeder = companySeeder;
         this.permissionSeeder = permissionSeeder;
         this.userSeeder = userSeeder;
+        this.productStatusSeeder = productStatusSeeder;
     }
 
     @Override
@@ -38,5 +42,6 @@ public class Runner implements CommandLineRunner {
         companySeeder.run();
         permissionSeeder.run();
         userSeeder.run();
+        productStatusSeeder.run();
     }
 }

@@ -38,6 +38,9 @@ public class ProductBasic extends BaseModel {
     @ManyToOne
     private ProductStatus status;
 
+    @ManyToOne
+    private ProductStatus originalStatus;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn()
     private List<ProductTax> taxes;

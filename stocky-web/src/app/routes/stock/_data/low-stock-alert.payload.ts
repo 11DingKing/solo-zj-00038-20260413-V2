@@ -21,3 +21,8 @@ export class BatchReplenishPayload {
     items?: ReplenishItemPayload[];
     remark?: string;
 }
+
+export class BatchSetLowStockPointPayload {
+    categoryIds?: number[];
+    lowStockPoint?: number;
+}

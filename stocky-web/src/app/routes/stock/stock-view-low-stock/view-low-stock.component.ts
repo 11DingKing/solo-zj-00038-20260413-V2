@@ -54,6 +54,11 @@ import {LowStockAlertUsecase} from '../_usecase/low-stock-alert.usecase';
             align-items: center;
             justify-content: space-between;
         }
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
     `]
 })
 export class ViewLowStockComponent implements OnInit, OnDestroy {
@@ -216,6 +221,30 @@ export class ViewLowStockComponent implements OnInit, OnDestroy {
                     });
             }
         });
+    };
+
+    public onExport = (): void => {
+        this.isLoading = true;
+        this.usecase.exportLowStockAlert()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (blob) => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'low-stock-alerts.xlsx';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                    this.notification.success('Success', 'Export completed successfully');
+                    this.isLoading = false;
+                },
+                error: (err) => {
+                    this.util.handleHttpRequestError(err, {service: this.notification});
+                    this.isLoading = false;
+                }
+            });
     };
 
     public getRowClass(item: LowStockAlertPayload): string {

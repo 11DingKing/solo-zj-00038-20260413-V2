@@ -5,6 +5,7 @@ import com.jamesaworo.stocky.core.constants.Setting;
 import com.jamesaworo.stocky.core.constants.enums.Template;
 import com.jamesaworo.stocky.core.params.BiParam;
 import com.jamesaworo.stocky.core.utils.FileUtil;
+import com.jamesaworo.stocky.features.notification.domain.service.StockAlertService;
 import com.jamesaworo.stocky.features.product.data.repository.ProductRepository;
 import com.jamesaworo.stocky.features.product.data.request.mapper.ProductBasicRow;
 import com.jamesaworo.stocky.features.product.data.request.mapper.ProductPriceRow;
@@ -37,10 +38,6 @@ import static com.jamesaworo.stocky.features.product.domain.enums.ProductQuantit
 import static com.jamesaworo.stocky.features.product.domain.enums.ProductQuantityUpdateType.INCREMENT;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
-/**
- * @author Aworo James
- * @since 5/10/23
- */
 @Usecase
 @RequiredArgsConstructor
 public class ProductUsecaseImpl implements IProductUsecase {
@@ -52,6 +49,7 @@ public class ProductUsecaseImpl implements IProductUsecase {
     private final ApplicationContext context;
     private final IProductCategoryUsecase productCategoryUsecase;
     private final IProductUnitOfMeasureUsecase unitOfMeasureUsecase;
+    private final StockAlertService stockAlertService;
 
     private Map<String, String> scrapMap = new LinkedHashMap<>();
     private Integer successUploadCount = 0;
@@ -114,7 +112,8 @@ public class ProductUsecaseImpl implements IProductUsecase {
             Optional<Product> optionalProduct = this.findById(product.getId());
             optionalProduct.ifPresent(existingProduct -> {
                 ProductBasic basic = existingProduct.getBasic();
-                this.basicUsecase.updateProductQuantity(basic.getId(), quantity, productQuantityUpdateType);
+                Optional<ProductBasic> updatedBasic = this.basicUsecase.updateProductQuantity(basic.getId(), quantity, productQuantityUpdateType);
+                updatedBasic.ifPresent(this.stockAlertService::checkAndHandleLowStockAlert);
             });
         });
     }

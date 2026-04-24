@@ -3,3 +3,24 @@
     <h3>Welcome back</h3>
     <h4>{{getFullName() | uppercase}}</h4>
 </nz-card>
+
+<div class="dashboard-grid">
+    <nz-card
+        class="stat-card"
+        [ngClass]="getLowStockCardClass()"
+        (click)="navigateToLowStock()"
+    >
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div class="stat-number" *ngIf="!isLoadingLowStock">{{ lowStockCount }}</div>
+                <div class="stat-number" *ngIf="isLoadingLowStock">
+                    <nz-skeleton-element nzType="button" nzActive></nz-skeleton-element>
+                </div>
+                <div class="stat-label">Low Stock Alerts</div>
+            </div>
+            <div class="stat-icon">
+                <i nz-icon nzType="warning"></i>
+            </div>
+        </div>
+    </nz-card>
+</div>

@@ -4,10 +4,16 @@
     </ng-template>
 
     <ng-template #action>
-        <button nz-button nzType="primary" (click)="onRefresh()" [nzLoading]="isLoading">
-            <i nz-icon nzType="reload"></i>
-            Refresh
-        </button>
+        <div class="header-actions">
+            <button nz-button (click)="onExport()" [nzLoading]="isLoading">
+                <i nz-icon nzType="download"></i>
+                Export
+            </button>
+            <button nz-button nzType="primary" (click)="onRefresh()" [nzLoading]="isLoading">
+                <i nz-icon nzType="reload"></i>
+                Refresh
+            </button>
+        </div>
     </ng-template>
 
     <ng-template #content>

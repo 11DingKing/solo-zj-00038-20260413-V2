@@ -29,14 +29,18 @@ public class ProductBasicUsecaseImpl implements IProductBasicUsecase {
     }
 
     @Override
-    public int updateProductQuantity(Long basicId, Integer quantity, ProductQuantityUpdateType updateType) {
+    public Optional<ProductBasic> updateProductQuantity(Long basicId, Integer quantity, ProductQuantityUpdateType updateType) {
+        int updated = 0;
         if (updateType == INCREMENT) {
-            return this.repository.incrementQuantity(basicId, quantity);
+            updated = this.repository.incrementQuantity(basicId, quantity);
         } else if (updateType == DECREMENT) {
-            return this.repository.decrementQuantity(basicId, quantity);
-        } else {
-            return 0;
+            updated = this.repository.decrementQuantity(basicId, quantity);
         }
+
+        if (updated > 0) {
+            return this.repository.findById(basicId);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -52,5 +56,10 @@ public class ProductBasicUsecaseImpl implements IProductBasicUsecase {
     @Override
     public Optional<ProductBasic> findBySku(String sku) {
         return this.repository.findBySkuEqualsIgnoreCase(sku);
+    }
+
+    @Override
+    public Optional<ProductBasic> findById(Long id) {
+        return this.repository.findById(id);
     }
 }
